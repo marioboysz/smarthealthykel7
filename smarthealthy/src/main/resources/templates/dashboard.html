@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Playfair+Display:ital,wght@0,600;1,500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Dashboard — Clamfy Wellness</title>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span></div>
+<header class="nav">
+    <a class="brand" th:href="@{/}">☁ clamfy<span>.</span></a>
+    <nav><span>Halo, <b th:text="${nama}">Nama</b> 👋</span><a class="pill" th:href="@{/logout}">Keluar</a></nav>
+</header>
+
+<main class="app-main">
+    <section class="banner">
+        <div>
+            <h1>Halo, <em th:text="${nama}">Sahabat</em>!</h1>
+            <p>Setiap catatan kecil adalah langkah menuju hidup yang lebih sehat.</p>
+        </div>
+        <div class="streak"><b th:text="${hariAktif} + '/7'">0/7</b><small>hari tercatat minggu ini 🔥</small></div>
+    </section>
+
+    <p class="ok" th:if="${pesan}" th:text="${pesan}"></p>
+    <p class="err" th:if="${galat}" th:text="${galat}"></p>
+
+    <section class="stats">
+        <div class="glass card stat reveal">
+            <div class="ico i4">🏃</div><div><b th:text="${today['AKTIVITAS']}">0</b><small>menit aktivitas · target 30</small></div>
+            <div class="meter"><i class="m4" th:style="|width:${persen['AKTIVITAS']}%|"></i></div>
+        </div>
+        <div class="glass card stat reveal">
+            <div class="ico i1">💧</div><div><b th:text="${today['AIR']}">0</b><small>gelas air · target 8</small></div>
+            <div class="meter"><i class="m1" th:style="|width:${persen['AIR']}%|"></i></div>
+        </div>
+        <div class="glass card stat reveal">
+            <div class="ico i2">🥗</div><div><b th:text="${today['NUTRISI']}">0</b><small>kkal · target 2000</small></div>
+            <div class="meter"><i class="m2" th:style="|width:${persen['NUTRISI']}%|"></i></div>
+        </div>
+        <div class="glass card stat reveal">
+            <div class="ico i3">🌙</div><div><b th:text="${today['TIDUR']}">0</b><small>jam tidur · target 8</small></div>
+            <div class="meter"><i class="m3" th:style="|width:${persen['TIDUR']}%|"></i></div>
+        </div>
+    </section>
+
+    <section class="split">
+        <form class="glass catat reveal" method="post" th:action="@{/catat}">
+            <h3>＋ Catat sekarang</h3>
+            <label>Jenis kegiatan
+                <select name="detail" id="detail">
+                    <option th:each="k : ${kegiatan}" th:value="${k.nama}" th:attr="data-unit=${k.satuan}" th:text="${k.ikon + ' ' + k.nama}"></option>
+                </select>
+            </label>
+            <label>Nilai / durasi
+                <div class="withunit"><input type="number" name="nilai" step="0.1" min="0.1" placeholder="0" required><span id="unit">Menit</span></div>
+            </label>
+            <label>Tanggal<input type="date" name="tanggal" id="tgl"></label>
+            <label>Keterangan (opsional)<input type="text" name="keterangan" maxlength="100" placeholder="mis. jalan pagi di taman"></label>
+            <button class="btn" type="submit">Simpan Catatan</button>
+        </form>
+
+        <div class="glass panel reveal">
+            <h3>Komposisi Aktivitas <small>menit / 7 hari</small></h3>
+            <div class="donut-wrap">
+                <div class="donut" id="donut"><span id="donutTotal">0<small>menit</small></span></div>
+                <ul class="legend" id="legend"></ul>
+            </div>
+        </div>
+    </section>
+
+    <div id="chartData" hidden th:attr="data-json=${chartJson}"></div>
+    <section class="charts">
+        <div class="glass panel reveal"><h3>🏃 Aktivitas <small>menit / 7 hari</small></h3><div class="bars" data-j="AKTIVITAS"></div></div>
+        <div class="glass panel reveal"><h3>💧 Air <small>gelas / 7 hari</small></h3><div class="bars" data-j="AIR"></div></div>
+        <div class="glass panel reveal"><h3>🥗 Nutrisi <small>kkal / 7 hari</small></h3><div class="bars" data-j="NUTRISI"></div></div>
+        <div class="glass panel reveal"><h3>🌙 Tidur <small>jam / 7 hari</small></h3><div class="bars" data-j="TIDUR"></div></div>
+    </section>
+
+    <section class="glass panel reveal">
+        <h3>Catatan terbaru</h3>
+        <ul class="log-list">
+            <li th:each="c : ${recent}">
+                <b th:text="${c.ikon}"></b>
+                <span>
+                    <strong th:text="${c.detail}"></strong> · <span th:text="${c.nilaiTeks}"></span><br>
+                    <small th:text="${c.tanggal}"></small>
+                    <small th:if="${c.keterangan != null}" th:text="'— ' + ${c.keterangan}"></small>
+                </span>
+                <form method="post" th:action="@{/catat/{id}/hapus(id=${c.id})}"><button type="submit" title="Hapus">✕</button></form>
+            </li>
+            <li th:if="${#lists.isEmpty(recent)}">Belum ada catatan. Mulai dari form “Catat sekarang” di atas ☁</li>
+        </ul>
+    </section>
+</main>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

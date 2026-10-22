@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f2a4a">
+    <meta name="description" content="Clamfy Wellness — hidup sehat yang ringan seperti awan.">
+    <title>Clamfy Wellness — Smart Healthy Living</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Playfair+Display:ital,wght@0,600;1,500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="sky" aria-hidden="true">
+    <span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span>
+</div>
+
+<header class="nav">
+    <a class="brand" href="#home">☁ clamfy<span>.</span></a>
+    <nav>
+        <a href="#fitur">Fitur</a>
+        <a href="#grafik">Dashboard</a>
+        <a href="#habit">Kebiasaan</a>
+        <a th:href="@{/login}">Masuk</a>
+        <a class="pill" th:href="@{/register}">Daftar Gratis</a>
+    </nav>
+</header>
+
+<main>
+    <section class="hero" id="home">
+        <div class="hero-text">
+            <p class="eyebrow">SMART HEALTHY LIVING</p>
+            <h1>Hidup sehat,<br><em>seringan awan.</em></h1>
+            <p class="lead">Catat air, tidur, nutrisi, dan aktivitas harianmu dalam satu tempat yang tenang dan menyenangkan.</p>
+            <div class="actions">
+                <a class="btn" th:href="@{/register}">Mulai Catat ↗</a>
+                <a class="link" href="#fitur">Kenali fitur</a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="glass score">
+                <svg viewBox="0 0 120 120" class="ring big">
+                    <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#5ee6e0"/><stop offset="1" stop-color="#4aa8ff"/>
+                    </linearGradient></defs>
+                    <circle cx="60" cy="60" r="52" class="track"/>
+                    <circle cx="60" cy="60" r="52" class="bar" id="heroRing" stroke="url(#g1)"/>
+                </svg>
+                <div class="score-num"><b id="heroNum">0</b><small>Skor Wellness</small></div>
+            </div>
+            <div class="glass chip chip1">💧 <b>6/8</b> gelas</div>
+            <div class="glass chip chip2">😴 <b>7,5</b> jam tidur</div>
+            <div class="glass chip chip3">👟 <b>8.420</b> langkah</div>
+        </div>
+    </section>
+
+    <section class="features" id="fitur">
+        <div class="intro reveal">
+            <p class="eyebrow">FITUR UTAMA</p>
+            <h2>Sehat itu perjalanan, <em>bukan perlombaan.</em></h2>
+        </div>
+        <div class="grid4">
+            <article class="card reveal"><div class="ico i1">💧</div><h3>Pantau Air</h3><p>Ketuk gelas untuk mencatat minummu hari ini.</p></article>
+            <article class="card reveal"><div class="ico i2">🥗</div><h3>Nutrisi Seimbang</h3><p>Lihat komposisi karbo, protein, lemak, dan serat.</p></article>
+            <article class="card reveal"><div class="ico i3">🌙</div><h3>Kualitas Tidur</h3><p>Grafik tidur mingguan agar istirahatmu terjaga.</p></article>
+            <article class="card reveal"><div class="ico i4">🏃</div><h3>Aktivitas</h3><p>Rayakan setiap langkah kecil yang kamu ambil.</p></article>
+        </div>
+    </section>
+
+    <section class="dash" id="grafik">
+        <div class="intro light reveal">
+            <p class="eyebrow">CONTOH DASHBOARD</p>
+            <h2>Semua kebiasaan, <em>dalam satu pandangan.</em></h2>
+        </div>
+        <div class="dash-grid">
+            <div class="glass dark reveal wide">
+                <h3>Aktivitas Mingguan <small>% target</small></h3>
+                <div class="bars" id="bars"></div>
+            </div>
+            <div class="glass dark reveal">
+                <h3>Nutrisi Hari Ini</h3>
+                <div class="donut-wrap">
+                    <div class="donut" id="donut"><span>1.850<small>kkal</small></span></div>
+                    <ul class="legend" id="legend"></ul>
+                </div>
+            </div>
+            <div class="glass dark reveal">
+                <h3>Tidur Mingguan <small>jam</small></h3>
+                <svg viewBox="0 0 300 130" class="sleep" id="sleep"></svg>
+            </div>
+            <div class="glass dark reveal">
+                <h3>Minum Air <small id="waterTxt">0 / 8 gelas</small></h3>
+                <div class="glasses" id="glasses"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="habit" id="habit">
+        <div class="habit-box reveal">
+            <div>
+                <p class="eyebrow">KEBIASAAN HARIAN</p>
+                <h2>Centang yang sudah <em>kamu lakukan.</em></h2>
+                <ul class="checks" id="checks"></ul>
+            </div>
+            <div class="ring-wrap">
+                <svg viewBox="0 0 120 120" class="ring">
+                    <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#ff8fa3"/><stop offset="1" stop-color="#ffd36b"/>
+                    </linearGradient></defs>
+                    <circle cx="60" cy="60" r="52" class="track dim"/>
+                    <circle cx="60" cy="60" r="52" class="bar" id="habitRing" stroke="url(#g2)"/>
+                </svg>
+                <div class="score-num"><b id="habitNum">0%</b><small>selesai</small></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="closing" id="tentang">
+        <p class="eyebrow">PENGINGAT KECIL</p>
+        <h2>Mulai kecil. <em>Tumbuh setiap hari.</em></h2>
+        <a class="btn light" href="#home">Kembali ke atas ↑</a>
+    </section>
+</main>
+
+<footer><span>☁ clamfy.</span><p>© 2026 Clamfy Wellness — A softer way to live well.</p></footer>
+
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

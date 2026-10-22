@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Playfair+Display:ital,wght@0,600;1,500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Admin — Clamfy Wellness</title>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span></div>
+<header class="nav">
+    <a class="brand" th:href="@{/}">☁ clamfy<span>.</span></a>
+    <nav><span>Admin: <b th:text="${nama}">Admin</b></span><a class="pill" th:href="@{/logout}">Keluar</a></nav>
+</header>
+
+<main class="app-main">
+    <section class="banner">
+        <div><h1>Panel <em>Admin</em></h1><p>Kelola pengguna dan jenis kegiatan Clamfy Wellness.</p></div>
+    </section>
+
+    <p class="ok" th:if="${pesan}" th:text="${pesan}"></p>
+    <p class="err" th:if="${galat}" th:text="${galat}"></p>
+
+    <section class="stats">
+        <div class="glass card stat"><div class="ico i1">👥</div><div><b th:text="${totalUser}">0</b><small>pengguna terdaftar</small></div></div>
+        <div class="glass card stat"><div class="ico i2">📝</div><div><b th:text="${totalLog}">0</b><small>total catatan</small></div></div>
+        <div class="glass card stat"><div class="ico i4">🏷️</div><div><b th:text="${#lists.size(kegiatan)}">0</b><small>jenis kegiatan</small></div></div>
+    </section>
+
+    <!-- TAMBAH PENGGUNA -->
+    <form class="glass catat" method="post" th:action="@{/admin/user/tambah}">
+        <h3>＋ Tambah pengguna</h3>
+        <label>Nama<input type="text" name="nama" required></label>
+        <label>Email<input type="email" name="email" required></label>
+        <label>Password<input type="password" name="password" minlength="6" required></label>
+        <label>Peran<select name="role"><option value="USER">Pengguna</option><option value="ADMIN">Admin</option></select></label>
+        <button class="btn" type="submit">Tambah Pengguna</button>
+    </form>
+
+    <!-- KELOLA PENGGUNA -->
+    <section class="glass panel">
+        <h3>Kelola Pengguna</h3>
+        <div class="tbl-wrap">
+        <table class="tbl">
+            <thead><tr><th>NAMA</th><th>EMAIL</th><th>PERAN</th><th>CATATAN</th><th>AKSI</th></tr></thead>
+            <tbody>
+            <tr th:each="r : ${rows}">
+                <td th:text="${r.nama()}"></td>
+                <td th:text="${r.email()}"></td>
+                <td><span class="badge" th:text="${r.role()}"></span></td>
+                <td th:text="${r.jumlah()}"></td>
+                <td class="aksi">
+                    <details>
+                        <summary>Edit</summary>
+                        <form class="edit-form" method="post" th:action="@{/admin/user/{id}/edit(id=${r.id()})}">
+                            <input type="text" name="nama" th:value="${r.nama()}" required>
+                            <input type="email" name="email" th:value="${r.email()}" required>
+                            <select name="role">
+                                <option value="USER" th:selected="${r.role() == 'USER'}">Pengguna</option>
+                                <option value="ADMIN" th:selected="${r.role() == 'ADMIN'}">Admin</option>
+                            </select>
+                            <input type="password" name="password" placeholder="Password baru (kosongkan jika tetap)">
+                            <button class="btn" type="submit">Simpan</button>
+                        </form>
+                    </details>
+                    <form th:if="${r.role() != 'ADMIN'}" method="post" th:action="@{/admin/user/{id}/delete(id=${r.id()})}" onsubmit="return confirm('Hapus pengguna beserta semua catatannya?')">
+                        <button class="del" type="submit">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </section>
+
+    <!-- KELOLA JENIS KEGIATAN -->
+    <form class="glass catat" method="post" th:action="@{/admin/kegiatan/tambah}">
+        <h3>＋ Tambah jenis kegiatan</h3>
+        <label>Nama kegiatan<input type="text" name="nama" placeholder="mis. Yoga" required></label>
+        <label>Masuk ke grafik
+            <select name="kategori">
+                <option value="AKTIVITAS">🏃 Aktivitas</option>
+                <option value="AIR">💧 Minum Air</option>
+                <option value="NUTRISI">🥗 Nutrisi</option>
+                <option value="TIDUR">🌙 Tidur</option>
+            </select>
+        </label>
+        <label>Satuan<input type="text" name="satuan" placeholder="Menit / Gelas / Kkal / Jam" required></label>
+        <button class="btn" type="submit">Tambah Kegiatan</button>
+    </form>
+
+    <section class="glass panel">
+        <h3>Daftar Jenis Kegiatan <small>tampil di dropdown pengguna</small></h3>
+        <div class="tbl-wrap">
+        <table class="tbl">
+            <thead><tr><th>KEGIATAN</th><th>KATEGORI</th><th>SATUAN</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="k : ${kegiatan}">
+                <td th:text="${k.ikon + ' ' + k.nama}"></td>
+                <td><span class="badge" th:text="${k.kategori}"></span></td>
+                <td th:text="${k.satuan}"></td>
+                <td>
+                    <form method="post" th:action="@{/admin/kegiatan/{id}/hapus(id=${k.id})}" onsubmit="return confirm('Hapus jenis kegiatan ini?')">
+                        <button class="del" type="submit">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Playfair+Display:ital,wght@0,600;1,500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Masuk — Clamfy Wellness</title>
+</head>
+<body class="auth-body">
+<div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span></div>
+<main class="auth">
+    <form class="glass auth-card" method="post" th:action="@{/login}">
+        <a class="brand" th:href="@{/}">☁ clamfy<span>.</span></a>
+        <h2>Selamat datang <em>kembali</em></h2>
+        <p class="ok" th:if="${param.daftar}">Akun berhasil dibuat, silakan masuk.</p>
+        <p class="err" th:if="${error}" th:text="${error}"></p>
+        <label>Email<input type="email" name="email" required></label>
+        <label>Password<input type="password" name="password" required></label>
+        <button class="btn" type="submit">Masuk</button>
+        <p class="alt">Belum punya akun? <a th:href="@{/register}">Daftar</a></p>
+    </form>
+</main>
+</body>
+</html>
